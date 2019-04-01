@@ -1,0 +1,37 @@
+/*框架样式*/
+*{margin: 0;padding: 0}
+.el-header {
+	background-color: #fff;
+	border-bottom: 1px solid #dcdfe6;
+	color: #333;
+	line-height: 60px;
+}
+.el-menu{
+	background: #282c34;
+	color: #fff;
+}
+.el-submenu__title,.el-menu-item{
+	color: #fff;
+}
+.el-submenu__title:hover,.el-menu-item:hover,.el-menu-item:focus, .el-menu-item:hover{
+	background: #4b515b;
+}
+.el-aside {
+	color: #333;
+}
+.aside{background: #282c34}
+[v-cloak] {
+	display: none;
+}
+
+
+/*表现类型样式*/
+.clearfix{zoom: 1}
+.clearfix:after{clear: both;content: '';display: block}
+.pull-left{float:left}
+.pull-right{float:right}
+.text-left{text-align: left}
+.text-center{text-align: center}
+.text-right{text-align: right}
+.vertical-m{vertical-align: middle;}
+.text-danger{color: #F56C6C}
