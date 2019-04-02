@@ -1,6 +1,6 @@
 # data-management
 
-> vue-cli demo练习,依赖爬虫(https://github.com/guosimin/python-spider/tree/master/csdnTest/csdn-test.py)的爬取数据项目
+> csdn博客每日阅读量和访问量统计的前后端,数据来源依赖爬虫(https://github.com/guosimin/python-spider/tree/master/csdnTest/csdn-test.py)
 
 ## Build Setup
 
