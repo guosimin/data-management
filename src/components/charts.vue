@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-loading="models.length>0?false:true">
 		<el-row>
 			<el-col :span="12">
 				<h3>访问数据</h3>

@@ -1,6 +1,6 @@
 # vue-demo
 
-> vue-cli demo联�练习
+> vue-cli demo练习
 
 ## Build Setup
 

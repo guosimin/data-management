@@ -1,7 +1,7 @@
 {
   "name": "vue-demo",
   "version": "1.0.0",
-  "description": "vue-cli demo联�练习",
+  "description": "vue-cli demo练习",
   "author": "guosimin",
   "private": true,
   "scripts": {
@@ -20,7 +20,8 @@
     "koa-router": "^7.4.0",
     "mongodb": "^3.2.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "webpack-cli": "^3.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

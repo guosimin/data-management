@@ -1,6 +1,6 @@
 <template>
 	<el-menu :default-openeds="['1', '3']">
-		<el-menu-item index="1">
+		<el-menu-item index="1" @click="handleOpen('/charts')">
 			<i class="el-icon-menu"></i>
 			<span slot="title">csdn访问数据</span>
 		</el-menu-item>
@@ -38,8 +38,8 @@
     export default {
         name: "common-menu",
 		methods: {
-			handleOpen(key, keyPath) {
-				console.log(key, keyPath);
+			handleOpen(location) {
+				this.$router.push(location)
 			},
 			handleClose(key, keyPath) {
 				console.log(key, keyPath);
