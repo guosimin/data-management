@@ -37,6 +37,8 @@ module.exports = {
 			readNum:0,
 			commentNum:0
 		}
+
+		//获取输出的models数据
 		for(var i = 0;i<models.length;i++){
 			for(key in models[i]['spider_data']){
 				var item = models[i]['spider_data'];
@@ -50,9 +52,12 @@ module.exports = {
 				pageNum:models[i].pagenum
 			})
 		}
+
+		// 日期排序
 		dateKey.sort();
 
-		var countData = {};
+		//获取统计数据， 获取增长数据
+		var countData = {},growData={};
 		for(var i = 0;i<models.length;i++){
 			var item = models[i]['spider_data'];
 			for(var j = 0;j<dateKey.length;j++){
@@ -63,16 +68,31 @@ module.exports = {
 						commentNum:0
 					};
 				}
+				if(!growData[key]){
+					growData[key] = {
+						readNum:0,
+						commentNum:0
+					};
+				}
 				if(item[key]){
 					countData[key].readNum += Number(item[key].read_num);
 					countData[key].commentNum += Number(item[key].comment_num);
+					if(countData[dateKey[j-1]]){
+						growData[key].readNum = countData[key].readNum - Number(countData[dateKey[j-1]].readNum);
+						growData[key].commentNum = countData[key].commentNum - Number(countData[dateKey[j-1]].commentNum);
+					}else{
+						growData[key].readNum = 0;
+						growData[key].commentNum = 0;
+					}
+
 				}else{
 					key =  dateKey[j-1]
 					if(item[key]){
 						countData[key].readNum += Number(item[key].read_num||0);
 						countData[key].commentNum += Number(item[key].comment_num||0);
 					}
-
+					growData[dateKey[j]].readNum = 0;
+					growData[dateKey[j]].commentNum = 0;
 				}
 			}
 		}
@@ -81,7 +101,8 @@ module.exports = {
 			model:{
 				count:count,
 				// dateKey:dateKey,
-				countData:countData
+				countData:countData,
+				growData:growData
 			},
 			models:newModels,
 			success:true,

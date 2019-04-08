@@ -5,7 +5,7 @@
 				<h3>访问数据</h3>
 			</el-col>
 			<el-col :span="12" class="text-right">
-				<el-radio-group v-model="radio3" size="mini">
+				<el-radio-group v-model="fillerDate" size="mini">
 					<!--<el-radio-button label="今天"></el-radio-button>
 					<el-radio-button label="最近七天"></el-radio-button>
 					<el-radio-button label="最近一个月"></el-radio-button>-->
@@ -22,6 +22,14 @@
 					<canvas id="myChart2"></canvas>
 				</el-col>
 			</el-row>
+			<el-row style="margin-top: 30px">
+				<el-col :span="12">
+					<canvas id="myChart1_1"></canvas>
+				</el-col>
+				<el-col :span="12">
+					<canvas id="myChart2_2"></canvas>
+				</el-col>
+			</el-row>
 		</div>
 
 		<div style="margin-top: 40px">
@@ -32,7 +40,6 @@
 							文章访问数据
 						</span>
 						<el-dropdown>
-
 							<el-badge :value="models.length" class="item">
 								<el-button type="primary" size="mini">
 									{{selectItem.title||"文章选择"}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -63,18 +70,25 @@
 </template>
 
 <script>
-	var Chart1,Chart2,Chart3,Chart4;
+	var Chart1,Chart2,Chart3,Chart4,Chart1_1,Chart2_1;
 	export default {
 		name: "charts",
 		data() {
 			return {
-				radio3: '全部',
+				//过滤
+				fillerDate: '全部',
+				//数据源
 				models: [],
+				//选择的文章数据
 				selectItem:{},
+				//x轴内容
 				labels:[]
 			}
 		},
 		methods:{
+			/**
+			 * 勾选方法
+			 */
 			select:function (item,models=[],label=[]) {
 				this.selectItem = item;
 				let readNum = [],commentNum = [];
@@ -91,36 +105,38 @@
 					}
 				}
 
-				var myChart3 = document.getElementById("myChart3").getContext("2d");
-				Chart3&&Chart3.destroy();
-				Chart3 = this._renderChart(myChart3, {
-					"data": {
-						"labels": label,
-						"datasets": [{
-							"label": '总阅读数',
-							"data": readNum,
-						}]
-
-					}
-				})
-
-				var myChart4 = document.getElementById("myChart4").getContext("2d");
-				Chart4&&Chart4.destroy();
-				Chart4 = this._renderChart(myChart4, {
-					"data": {
-						"labels": label,
-						"datasets": [{
-							"label": '总评论数',
-							"data": commentNum,
-						}]
-
-					}
-				})
-
+				this._createChart("myChart3",Chart3,label,[{
+					"label": '总阅读数',
+					"data": readNum,
+				}]);
+				this._createChart("myChart4",Chart4,label,[{
+					"label": '总评论数',
+					"data": commentNum,
+				}]);
 			},
-			_renderChart:function (dom, option) {
+			/**
+			 * 创建chart调用
+			 */
+			_createChart:function(str,chartName,label,datasets,type){
+				var label = this.labels||label;
+				var chartDom = document.getElementById(str).getContext("2d");
+				var chart = chartName;
+				chart&&chart.destroy();
+				chart = this._renderChart(chartDom, {
+					"data": {
+						"labels": label,
+						"datasets":datasets
+
+					}
+				},type)
+				console.log(datasets,"datasets");
+			},
+			/**
+			 * 渲染chart调用
+			 */
+			_renderChart:function (dom, option,type) {
 				var defalutOption = {
-					"type": "line",
+					"type": type||"line",
 					"data": {
 						"labels": [],
 						"datasets": [{
@@ -165,44 +181,46 @@
 						that.models = resp.models;
 						that.selectItem = resp.models[0];
 						params.model = resp.model || {};
-						var label = [], readNum = [], commentNum = [];
+						var label = [], readNum = [], commentNum = [],growReadNum=[],growCommentNum=[];
 						for (var key in params.model.countData) {
 							var item = (params.model.countData)[key];
 							label.push(key);
 							readNum.push(item.readNum)
 							commentNum.push(item.commentNum)
 						}
+
+						for (var key in params.model.growData) {
+							var item = (params.model.growData)[key];
+							growReadNum.push(item.readNum)
+							growCommentNum.push(item.commentNum)
+						}
 						that.labels = label;
-						that.$options.methods.select(that.selectItem,that.models,label);
-
-
-						//显示总阅读数
-						var myChart1 = document.getElementById("myChart1").getContext("2d");
-						_renderChart(myChart1, {
-							"data": {
-								"labels": label,
-								"datasets": [{
-									"label": '总阅读数',
-									"data": readNum,
-								}]
-
-							}
-						})
-
-						//显示总评论数
-						var myChart2 = document.getElementById("myChart2").getContext("2d");
-						_renderChart(myChart2, {
-							"data": {
-								"labels": label,
-								"datasets": [{
-									"label": '总评论数',
-									"data": commentNum,
-								}]
-
-							}
-						})
+						_initRender({readNum:readNum,commentNum:commentNum,growReadNum:growReadNum,growCommentNum:growCommentNum});
 					}
 				});
+			}
+
+			/**
+			 * 初始化渲染
+			 */
+			function _initRender(obj) {
+				that.$options.methods.select(that.selectItem,that.models,that.labels);
+				that.$options.methods._createChart("myChart1",Chart1,that.labels,[{
+					"label": '总阅读数',
+					"data": obj.readNum,
+				}]);
+				that.$options.methods._createChart("myChart2",Chart2,that.labels,[{
+					"label": '总评论数',
+					"data": obj.commentNum,
+				}]);
+				that.$options.methods._createChart("myChart1_1",Chart1_1,that.labels,[{
+					"label": '总阅读数-增长数',
+					"data": obj.growReadNum,
+				}],'horizontalBar');
+				that.$options.methods._createChart("myChart2_2",Chart2_1,that.labels,[{
+					"label": '总评论数-增长数',
+					"data": obj.growCommentNum,
+				}],'horizontalBar');
 			}
 
 			/**
@@ -213,35 +231,8 @@
 			}
 
 			//-- =======================================初始化===========================================
-			_init()
-
-
-			/*var myLineChart = new Chart(c, {
-				"type": "line",
-				"data": {
-					"labels": ["January", "February", "March", "April", "May", "June", "July"],
-					"datasets": [{
-						"label": "访问量",
-						"data": [65, 59, 80, 81, 56, 55, 40],
-						"fill": false,
-						"borderColor": "#409eff",
-						"lineTension": 0.1
-					},
-						{
-							"label": "访问数据",
-							"data": [615, 539, 80, 81, 11, 255, 340],
-							"fill": false,
-							"borderColor": "#9d0101",
-							"lineTension": 0.1
-						}]
-				},
-				"options": {}
-			});*/
+			_init();
 		}
 
 	}
 </script>
-
-<style scoped>
-
-</style>
