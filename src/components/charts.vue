@@ -154,25 +154,10 @@
 				}
 				defalutOption = $.extend(true, defalutOption, option);
 				return new Chart(dom, defalutOption);
-			}
-		},
-		mounted() {
-			let that = this;
-			//-- =======================================变量===========================================
-			let params = {}
-
-			//-- =======================================函数===========================================
-			/**
-			 * 渲染图表
-			 */
-			function _renderChart(dom, option) {
-				that.$options.methods._renderChart(dom, option);
-			}
-
-			/**
-			 * 加载数据
-			 */
-			function _loadData() {
+			},
+			_loadData(){
+				let that = this
+				let params = {}
 				that.loading = true;
 				$.ajax({
 					url: 'http://localhost:7777/charts/query',
@@ -199,44 +184,37 @@
 							growCommentNum.push(item.commentNum)
 						}
 						that.labels = label;
-						_initRender({readNum:readNum,commentNum:commentNum,growReadNum:growReadNum,growCommentNum:growCommentNum});
+						that._initRender({readNum:readNum,commentNum:commentNum,growReadNum:growReadNum,growCommentNum:growCommentNum});
 					}
 				});
-			}
+			},
+			_initRender(obj){
+				let that = this
+				that.select(that.selectItem,that.models,that.labels);
 
-			/**
-			 * 初始化渲染
-			 */
-			function _initRender(obj) {
-				that.$options.methods.select(that.selectItem,that.models,that.labels);
-
-				that.$options.methods._createChart("myChart1",that.labels,[{
+				that._createChart("myChart1",that.labels,[{
 					"label": '总阅读数',
 					"data": obj.readNum,
 				}]);
-				that.$options.methods._createChart("myChart2",that.labels,[{
+				that._createChart("myChart2",that.labels,[{
 					"label": '总评论数',
 					"data": obj.commentNum,
 				}]);
-				that.$options.methods._createChart("myChart1_1",that.labels,[{
+				that._createChart("myChart1_1",that.labels,[{
 					"label": '总阅读数-增长数',
 					"data": obj.growReadNum,
 				}],'horizontalBar');
-				that.$options.methods._createChart("myChart2_2",that.labels,[{
+				that._createChart("myChart2_2",that.labels,[{
 					"label": '总评论数-增长数',
 					"data": obj.growCommentNum,
 				}],'horizontalBar');
+			},
+			_init(){
+				this._loadData();
 			}
-
-			/**
-			 * 初始化
-			 */
-			function _init() {
-				_loadData();
-			}
-
-			//-- =======================================初始化===========================================
-			_init();
+		},
+		mounted() {
+			this._init();
 		}
 
 	}

@@ -30,7 +30,7 @@ module.exports = {
 				});
 			})
 		}
-		ctx.response.type = 'application/json';
+
 		await loadData()
 		
 		//-- =======================================数据处理===========================================
@@ -99,7 +99,7 @@ module.exports = {
 			}
 		}
 
-		ctx.response.body = {
+		ctx.response.body  = Object.assign(ctx.response.body||{},{
 			model:{
 				count:count,
 				// dateKey:dateKey,
@@ -107,43 +107,48 @@ module.exports = {
 				growData:growData
 			},
 			models:newModels,
-			success:true,
-			valid:true
-		};
+		});
 	},
 	page:async function (ctx){
 		let pagingQuery = ctx.request.body.pagingQuery;
 		let models = [];
 		let count = null;
 		function loadData(){
-			return new Promise((resolve,reject)=>{
-				MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
+			return new Promise(  (resolve,reject)=>{
+				MongoClient.connect(url, { useNewUrlParser: true }, async function(err, db) {
 					if (err) throw err;
 					var dbo = db.db("demo");
-					var a = dbo.collection("page").find({},{projection:{title:1,link:1,create_time:1}});
-					count = a.count(true);
-					a.skip(pagingQuery.pageIndex*pagingQuery.pageSize).limit(pagingQuery.pageSize)
-						.sort({"create_time":-1,'spider_data.last_update_time':1})
-						.toArray(function(err, result) { // 返回集合中所有数据
-							models = result;
+					var cursor = dbo.collection("page").find({},{projection:{title:1,link:1,create_time:1}});
+					await new Promise((resolve, reject) => {
+						cursor.count(true,{},function (error,result) {
+							// 返回总条数
+							count = result;
 							resolve();
+						});
 					});
+					await new Promise((resolve, reject) => {
+						cursor.skip(pagingQuery.pageIndex*pagingQuery.pageSize)
+							.limit(pagingQuery.pageSize)
+							.sort({"create_time":-1,'spider_data.last_update_time':1})
+							.toArray(function(err, result) {
+								// 返回集合中所有数据
+								models = result;
+								resolve();
+							})
+					});
+					resolve();
 				});
 			})
 		}
-		ctx.response.type = 'application/json';
+
 		await loadData();
-
-
-		ctx.response.body = {
+		ctx.response.body  = Object.assign(ctx.response.body||{},{
 			paging:{
 				pageIndex:pagingQuery.pageIndex+1,
 				pageSize:pagingQuery.pageSize,
 				count:count
 			},
 			models:models,
-			success:true,
-			valid:true
-		};
+		});
 	}
 }

@@ -30,3 +30,7 @@ node app.js
 * 20190408:新增增长数视图     
     
 ![](./src/assets/img/readmeImg/20190408.png)
+
+* 20190409:新增文章列表视图
+    
+![](./src/assets/img/readmeImg/20190409.png)

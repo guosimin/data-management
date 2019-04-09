@@ -35,6 +35,11 @@ function handlePage(pagingQuery){
 
 module.exports = async function(app) {
 	app.use(async (ctx, next) => {
+		ctx.response.type = 'application/json';
+		ctx.response.body = {
+			success:true,
+			valid:true
+		}
 		try {
 			// 处理分页
 			if(ctx.request.body&&ctx.request.body.pagingQuery){

@@ -21,9 +21,9 @@
 			</el-table-column>
 		</el-table>
 		<el-pagination style="margin-top:30px;"
-			background
+			background @current-change="currentChange"
 			layout="prev, pager, next"
-			:total="1000">
+			:total="paging.count">
 		</el-pagination>
 	</div>
 </template>
@@ -34,24 +34,20 @@
 		data() {
 			return {
 				models:[],
-				loading:true
+				loading:true,
+				paging:{}
 			}
 		},
-		mounted(){
-			let that = this;
-			//-- =======================================变量===========================================
-			let params = {}
-
-			//-- =======================================函数===========================================
-			/**
-			 * 加载数据
-			 * @private
-			 */
-			function _loadData() {
+		methods:{
+			currentChange(pageIndex) {
+				this._loadData(pageIndex);
+			},
+			_loadData(pageIndex){
+				let that = this;
 				that.loading = true;
 				let postData = {
 					pagingQuery:{
-						pageIndex:1,
+						pageIndex:pageIndex||1,
 						pageSize:10
 					}
 				}
@@ -63,20 +59,17 @@
 					dataType: 'json',
 					success: function (resp) {
 						that.models = resp.models;
+						that.paging = resp.paging;
 						that.loading = false;
 					}
 				});
+			},
+			_init(){
+				this._loadData();
 			}
-
-			/**
-			 * 初始化
-			 * @private
-			 */
-			function _init() {
-				_loadData();
-			}
-			//-- =======================================初始化===========================================
-			_init();
+		},
+		mounted(){
+			this._init();
 		}
     }
 </script>
