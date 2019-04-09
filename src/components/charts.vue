@@ -1,5 +1,5 @@
 <template>
-	<div v-loading="models.length>0?false:true">
+	<div v-loading="loading">
 		<el-row>
 			<el-col :span="12">
 				<h3>访问数据</h3>
@@ -70,11 +70,13 @@
 </template>
 
 <script>
-	var Chart1,Chart2,Chart3,Chart4,Chart1_1,Chart2_1;
+	let Chart1,Chart2,Chart3,Chart4,Chart1_1,Chart2_1;
 	export default {
 		name: "charts",
 		data() {
 			return {
+				//正在加载数据
+				loading:true,
 				//过滤
 				fillerDate: '全部',
 				//数据源
@@ -89,27 +91,29 @@
 			/**
 			 * 勾选方法
 			 */
-			select:function (item,models=[],label=[]) {
+			select(item,models=[],label=[]) {
 				this.selectItem = item;
 				let readNum = [],commentNum = [];
 				models = this.models||models;
 				label = this.labels||label;
-				for (var i = 0;i<models.length;i++){
+				for (let i = 0;i<models.length;i++){
 					if(models[i].title===item.title){
-						var item = models[i].spiderData;
-						for (var key in label) {
-							var index = label[key];
+						let item = models[i].spiderData;
+						for (let key in label) {
+							let index = label[key];
 							readNum.push(item[index]&&item[index].read_num||0)
 							commentNum.push(item[index]&&item[index].comment_num||0)
 						}
 					}
 				}
 
-				this._createChart("myChart3",Chart3,label,[{
+				Chart3&&Chart3.destroy();
+				Chart3=this._createChart("myChart3",label,[{
 					"label": '总阅读数',
 					"data": readNum,
 				}]);
-				this._createChart("myChart4",Chart4,label,[{
+				Chart4&&Chart4.destroy();
+				Chart4=this._createChart("myChart4",label,[{
 					"label": '总评论数',
 					"data": commentNum,
 				}]);
@@ -117,25 +121,23 @@
 			/**
 			 * 创建chart调用
 			 */
-			_createChart:function(str,chartName,label,datasets,type){
-				var label = this.labels||label;
-				var chartDom = document.getElementById(str).getContext("2d");
-				var chart = chartName;
-				chart&&chart.destroy();
-				chart = this._renderChart(chartDom, {
+			_createChart (str,label,datasets,type){
+				label = this.labels||label;
+				let chartDom = document.getElementById(str).getContext("2d");
+				let chart =  this._renderChart(chartDom, {
 					"data": {
 						"labels": label,
 						"datasets":datasets
 
 					}
 				},type)
-				console.log(datasets,"datasets");
+				return chart;
 			},
 			/**
 			 * 渲染chart调用
 			 */
-			_renderChart:function (dom, option,type) {
-				var defalutOption = {
+			_renderChart (dom, option,type) {
+				let defalutOption = {
 					"type": type||"line",
 					"data": {
 						"labels": [],
@@ -154,10 +156,10 @@
 				return new Chart(dom, defalutOption);
 			}
 		},
-		mounted: function () {
-			var that = this;
+		mounted() {
+			let that = this;
 			//-- =======================================变量===========================================
-			var params = {}
+			let params = {}
 
 			//-- =======================================函数===========================================
 			/**
@@ -171,6 +173,7 @@
 			 * 加载数据
 			 */
 			function _loadData() {
+				that.loading = true;
 				$.ajax({
 					url: 'http://localhost:7777/charts/query',
 					type: 'POST',
@@ -178,19 +181,20 @@
 					data: JSON.stringify({}),
 					dataType: 'json',
 					success: function (resp) {
+						that.loading = false;
 						that.models = resp.models;
 						that.selectItem = resp.models[0];
 						params.model = resp.model || {};
-						var label = [], readNum = [], commentNum = [],growReadNum=[],growCommentNum=[];
-						for (var key in params.model.countData) {
-							var item = (params.model.countData)[key];
+						let label = [], readNum = [], commentNum = [],growReadNum=[],growCommentNum=[];
+						for (let key in params.model.countData) {
+							let item = (params.model.countData)[key];
 							label.push(key);
 							readNum.push(item.readNum)
 							commentNum.push(item.commentNum)
 						}
 
-						for (var key in params.model.growData) {
-							var item = (params.model.growData)[key];
+						for (let key in params.model.growData) {
+							let item = (params.model.growData)[key];
 							growReadNum.push(item.readNum)
 							growCommentNum.push(item.commentNum)
 						}
@@ -205,19 +209,20 @@
 			 */
 			function _initRender(obj) {
 				that.$options.methods.select(that.selectItem,that.models,that.labels);
-				that.$options.methods._createChart("myChart1",Chart1,that.labels,[{
+
+				that.$options.methods._createChart("myChart1",that.labels,[{
 					"label": '总阅读数',
 					"data": obj.readNum,
 				}]);
-				that.$options.methods._createChart("myChart2",Chart2,that.labels,[{
+				that.$options.methods._createChart("myChart2",that.labels,[{
 					"label": '总评论数',
 					"data": obj.commentNum,
 				}]);
-				that.$options.methods._createChart("myChart1_1",Chart1_1,that.labels,[{
+				that.$options.methods._createChart("myChart1_1",that.labels,[{
 					"label": '总阅读数-增长数',
 					"data": obj.growReadNum,
 				}],'horizontalBar');
-				that.$options.methods._createChart("myChart2_2",Chart2_1,that.labels,[{
+				that.$options.methods._createChart("myChart2_2",that.labels,[{
 					"label": '总评论数-增长数',
 					"data": obj.growCommentNum,
 				}],'horizontalBar');

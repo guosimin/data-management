@@ -15,6 +15,7 @@ const Koa = require('koa'),
 	  routing = require('./server/router/index.js'),
 	  cors = require('koa-cors'),
 	  bodyParser = require('koa-bodyparser');
+	  handlePostData = 	require('./server/middleware/handlePostData')
 
 // 创建一个Koa对象表示web app本身:
 const app = new Koa();
@@ -24,6 +25,7 @@ const app = new Koa();
  */
 app.use(bodyParser());
 
+console.log(JSON.stringify(handlePostData))
 
 app.use(cors({
 	origin: function (ctx) {
@@ -35,6 +37,8 @@ app.use(cors({
 	methods:['GET','POST'],
 	allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
 }));
+
+handlePostData(app);
 
 // 对于任何请求，app将调用该异步函数处理请求：
 /*app.use(async (ctx, next) => {

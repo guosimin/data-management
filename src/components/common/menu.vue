@@ -4,7 +4,11 @@
 			<i class="el-icon-menu"></i>
 			<span slot="title">csdn访问数据</span>
 		</el-menu-item>
-		<el-submenu index="2">
+		<el-menu-item index="2" @click="handleOpen('/page-list')">
+			<i class="el-icon-menu"></i>
+			<span slot="title">文章列表</span>
+		</el-menu-item>
+		<el-submenu index="3">
 			<template slot="title"><i class="el-icon-menu"></i>导航二</template>
 			<el-menu-item-group>
 				<el-menu-item index="2-1">选项1</el-menu-item>
@@ -14,7 +18,7 @@
 				<el-menu-item index="2-3">选项3</el-menu-item>
 			</el-menu-item-group>
 		</el-submenu>
-		<el-submenu index="3">
+		<el-submenu index="4">
 			<template slot="title"><i class="el-icon-setting"></i>导航三</template>
 			<el-menu-item-group>
 				<el-menu-item index="3-1">选项1</el-menu-item>
@@ -24,7 +28,7 @@
 				<el-menu-item index="3-3">选项3</el-menu-item>
 			</el-menu-item-group>
 		</el-submenu>
-		<el-submenu index="4">
+		<el-submenu index="5">
 			<template slot="title"><i class="el-icon-message"></i>导航一</template>
 			<el-menu-item-group>
 				<el-menu-item index="1-1">选项1</el-menu-item>

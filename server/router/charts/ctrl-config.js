@@ -13,6 +13,8 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/runoob";
 
 
+
+
 module.exports = {
 	query:async function (ctx) {
 		let models = [];
@@ -105,6 +107,41 @@ module.exports = {
 				growData:growData
 			},
 			models:newModels,
+			success:true,
+			valid:true
+		};
+	},
+	page:async function (ctx){
+		let pagingQuery = ctx.request.body.pagingQuery;
+		let models = [];
+		let count = null;
+		function loadData(){
+			return new Promise((resolve,reject)=>{
+				MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
+					if (err) throw err;
+					var dbo = db.db("demo");
+					var a = dbo.collection("page").find({},{projection:{title:1,link:1,create_time:1}});
+					count = a.count(true);
+					a.skip(pagingQuery.pageIndex*pagingQuery.pageSize).limit(pagingQuery.pageSize)
+						.sort({"create_time":-1,'spider_data.last_update_time':1})
+						.toArray(function(err, result) { // 返回集合中所有数据
+							models = result;
+							resolve();
+					});
+				});
+			})
+		}
+		ctx.response.type = 'application/json';
+		await loadData();
+
+
+		ctx.response.body = {
+			paging:{
+				pageIndex:pagingQuery.pageIndex+1,
+				pageSize:pagingQuery.pageSize,
+				count:count
+			},
+			models:models,
 			success:true,
 			valid:true
 		};
