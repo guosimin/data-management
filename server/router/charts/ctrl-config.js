@@ -11,7 +11,7 @@
  * */
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/runoob";
-
+var ObjectID = require('mongodb').ObjectID;
 
 
 
@@ -149,6 +149,38 @@ module.exports = {
 				count:count
 			},
 			models:models,
+		});
+	},
+	detail:async function (ctx){
+		let content = '';
+		let model = [];
+		function HTMLDecode(a) {
+			a = "" + a;
+			return a.replace(/&lt;/g, "<")
+					.replace(/&gt;/g, ">")
+					.replace(/&amp;/g, "&")
+					.replace(/&quot;/g, '"')
+					.replace(/&apos;/g, "'");
+		}
+		function loadData(){
+			return new Promise((resolve,reject)=>{
+				MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
+					if (err) throw err;
+					var dbo = db.db("demo");
+					dbo.collection("page").findOne({'_id':ObjectID(ctx.query.id)},{},function (error,result) {
+						content = HTMLDecode(result.content);
+						resolve();
+					})
+				});
+			})
+		}
+
+		await loadData()
+
+		ctx.response.body  = Object.assign(ctx.response.body||{},{
+			model:{
+				content:content
+			},
 		});
 	}
 }

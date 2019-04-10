@@ -11,6 +11,7 @@ import router from './router'
 //引入样式（index为ElementUI的样式，main为公共样式）
 import '@/assets/css/index.css'
 import '@/assets/css/main.css'
+import '@/assets/css/csdn.css'
 
 //引入chart图标
 import Chart from 'chart.js';

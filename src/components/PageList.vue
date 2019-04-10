@@ -6,13 +6,16 @@
 			border
 			style="width: 100%;margin-top: 20px;">
 			<el-table-column
+				prop="title"
+				label="文章名称">
+				<template slot-scope="scope">
+					<el-button type="text" @click="handleOpen('/page-detail',{id:scope.row._id})">{{scope.row.title}}</el-button>
+				</template>
+			</el-table-column>
+			<el-table-column
 				prop="create_time"
 				label="创建日期"
 				width="180">
-			</el-table-column>
-			<el-table-column
-				prop="title"
-				label="文章名称">
 			</el-table-column>
 			<el-table-column
 				prop="link"
@@ -39,6 +42,9 @@
 			}
 		},
 		methods:{
+			handleOpen(location,query){
+				this.$router.push({path:location,query:query})
+			},
 			currentChange(pageIndex) {
 				this._loadData(pageIndex);
 			},
@@ -64,12 +70,12 @@
 					}
 				});
 			},
-			_init(){
+			init(){
 				this._loadData();
 			}
 		},
 		mounted(){
-			this._init();
+			this.init();
 		}
     }
 </script>

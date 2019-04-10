@@ -122,6 +122,9 @@
 			 * 创建chart调用
 			 */
 			_createChart (str,label,datasets,type){
+				if(!document.getElementById(str)){
+					return false;
+				}
 				label = this.labels||label;
 				let chartDom = document.getElementById(str).getContext("2d");
 				let chart =  this._renderChart(chartDom, {
@@ -209,12 +212,12 @@
 					"data": obj.growCommentNum,
 				}],'horizontalBar');
 			},
-			_init(){
+			init(){
 				this._loadData();
 			}
 		},
 		mounted() {
-			this._init();
+			this.init();
 		}
 
 	}

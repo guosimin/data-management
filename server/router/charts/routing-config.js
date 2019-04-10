@@ -16,5 +16,6 @@ const ctrl = require('./ctrl-config');
 module.exports = [
 	// ======= 页面相关路由 =======
 	{path: '/charts/query', ctrl: ctrl.query,method:'post'},
-	{path: '/page/query', ctrl: ctrl.page,method:'post'}
+	{path: '/page/query', ctrl: ctrl.page,method:'post'},
+	{path: '/page/detail', ctrl: ctrl.detail,method:'get'}
 ]
