@@ -27,15 +27,25 @@ node app.js
 
 ## last UPdate
 
-* 20190408:新增增长数视图     
+* 201904010:     
+1.新增文章跳转详情功能     
+2.详情引入csdn样式     
+3.新增hightlight组件          
     
-![](./src/assets/img/readmeImg/20190408.png)
+![](./src/assets/img/readmeImg/20190410.png)
 
-* 20190409:新增文章列表视图
+* 20190409:     
+1.新增文章列表视图     
+2.修复页面加载问题     
+3.修改chart展示错误问题     
+4.新增分页请求参数统一处理     
+5.实现文章列表翻页  
     
 ![](./src/assets/img/readmeImg/20190409.png)
 
 
-* 201904010:新增文章详情展示    
+* 20190408:     
+1.新增增长数视图     
     
-![](./src/assets/img/readmeImg/20190410.png)
+![](./src/assets/img/readmeImg/20190408.png)
+
