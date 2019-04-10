@@ -34,3 +34,8 @@ node app.js
 * 20190409:新增文章列表视图
     
 ![](./src/assets/img/readmeImg/20190409.png)
+
+
+* 201904010:新增文章详情展示    
+    
+![](./src/assets/img/readmeImg/20190410.png)
