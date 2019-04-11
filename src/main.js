@@ -13,6 +13,12 @@ import '@/assets/css/index.css'
 import '@/assets/css/main.css'
 import '@/assets/css/csdn.css'
 
+// 公共模块
+import menu from '@/components/common/component/menu'
+
+//指令
+import highlight from '@/components/common/directive/highlight'
+
 //引入chart图标
 import Chart from 'chart.js';
 
@@ -20,6 +26,8 @@ import $ from "jquery";
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.component('common-menu',menu)
+Vue.directive('highlight',highlight)
 
 /* eslint-disable no-new */
 new Vue({
