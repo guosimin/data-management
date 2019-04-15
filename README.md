@@ -25,12 +25,12 @@ node app.js
 ![](https://img-blog.csdnimg.cn/20190402144205489.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2dpdGh1Yl8zOTU3MDcxNw==,size_16,color_FFFFFF,t_70)
 
 
-## last UPdate
-* 20190415: 
-1.~~去除首页单篇文章阅读量和评论量功能~~
-2.文章列表新增阅读数和评论数展示
-3.首页新增时间筛选功能
-4.根据数据库结构调整，调整请求参数
+## last UPdate   
+* 20190415:         
+1.~~去除首页单篇文章阅读量和评论量功能~~          
+2.文章列表新增阅读数和评论数展示      
+3.首页新增时间筛选功能      
+4.根据数据库结构调整，调整请求参数       
 
 
 * 20190410:     
