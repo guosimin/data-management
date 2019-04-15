@@ -5,11 +5,11 @@
 				<h3>访问数据</h3>
 			</el-col>
 			<el-col :span="12" class="text-right">
-				<el-radio-group v-model="fillerDate" size="mini">
-					<!--<el-radio-button label="今天"></el-radio-button>
-					<el-radio-button label="最近七天"></el-radio-button>
-					<el-radio-button label="最近一个月"></el-radio-button>-->
-					<el-radio-button label="全部"></el-radio-button>
+				<el-radio-group v-model="fillerDate" size="mini" @change = "change">
+					<!--<el-radio-button label="今天"></el-radio-button>-->
+					<el-radio-button label="1">最近七天</el-radio-button>
+					<el-radio-button label="2">最近三十天</el-radio-button>
+					<el-radio-button label="3">全部</el-radio-button>
 				</el-radio-group>
 			</el-col>
 		</el-row>
@@ -31,41 +31,6 @@
 				</el-col>
 			</el-row>
 		</div>
-
-		<div style="margin-top: 40px">
-			<el-row>
-				<el-col :span="24">
-					<h3>
-						<span class="vertical-m">
-							文章访问数据
-						</span>
-						<el-dropdown>
-							<el-badge :value="models.length" class="item">
-								<el-button type="primary" size="mini">
-									{{selectItem.title||"文章选择"}}<i class="el-icon-arrow-down el-icon--right"></i>
-								</el-button>
-							</el-badge>
-							<el-dropdown-menu slot="dropdown">
-								<el-dropdown-item @click.native="select(item)" :key="index" v-for="(item,index) in models">
-									<span class="text-danger">{{item.pageNum}}</span>&nbsp;&nbsp;&nbsp;{{item.title}}
-								</el-dropdown-item>
-							</el-dropdown-menu>
-						</el-dropdown>
-
-					</h3>
-				</el-col>
-			</el-row>
-
-
-			<el-row>
-				<el-col :span="12">
-					<canvas id="myChart3"></canvas>
-				</el-col>
-				<el-col :span="12">
-					<canvas id="myChart4"></canvas>
-				</el-col>
-			</el-row>
-		</div>
 	</div>
 </template>
 
@@ -78,45 +43,16 @@
 				//正在加载数据
 				loading:true,
 				//过滤
-				fillerDate: '全部',
+				fillerDate: '3',
 				//数据源
 				models: [],
-				//选择的文章数据
-				selectItem:{},
 				//x轴内容
 				labels:[]
 			}
 		},
 		methods:{
-			/**
-			 * 勾选方法
-			 */
-			select(item,models=[],label=[]) {
-				this.selectItem = item;
-				let readNum = [],commentNum = [];
-				models = this.models||models;
-				label = this.labels||label;
-				for (let i = 0;i<models.length;i++){
-					if(models[i].title===item.title){
-						let item = models[i].spiderData;
-						for (let key in label) {
-							let index = label[key];
-							readNum.push(item[index]&&item[index].read_num||0)
-							commentNum.push(item[index]&&item[index].comment_num||0)
-						}
-					}
-				}
-
-				Chart3&&Chart3.destroy();
-				Chart3=this._createChart("myChart3",label,[{
-					"label": '总阅读数',
-					"data": readNum,
-				}]);
-				Chart4&&Chart4.destroy();
-				Chart4=this._createChart("myChart4",label,[{
-					"label": '总评论数',
-					"data": commentNum,
-				}]);
+			change(){
+				this._loadData()
 			},
 			/**
 			 * 创建chart调用
@@ -158,20 +94,37 @@
 				defalutOption = $.extend(true, defalutOption, option);
 				return new Chart(dom, defalutOption);
 			},
+			_getData(beforeDays){
+				var myDate;
+				if(beforeDays&&beforeDays>0){
+					var nowDate = new Date();
+					myDate = new Date(nowDate - 1000 * 60 * 60 * 24 * beforeDays);
+				}else{
+					myDate =new Date();
+				}
+				var nowY = myDate.getFullYear();
+				var nowM = myDate.getMonth()+1;
+				var nowD = myDate.getDate();
+				var enddate = nowY+(nowM<10 ? "0" + nowM : nowM)+(nowD<10 ? "0"+ nowD : nowD);
+				return enddate;
+			},
 			_loadData(){
 				let that = this
 				let params = {}
 				that.loading = true;
+				var postData = {'userName':'github_39570717'};
+				if(that.fillerDate!=3){
+					postData.start = that.fillerDate==1?that._getData(7):that._getData(30);
+					postData.end = that._getData();
+				}
 				$.ajax({
 					url: 'http://localhost:7777/charts/query',
 					type: 'POST',
 					contentType: 'application/json',
-					data: JSON.stringify({}),
+					data: JSON.stringify(postData),
 					dataType: 'json',
 					success: function (resp) {
 						that.loading = false;
-						that.models = resp.models;
-						that.selectItem = resp.models[0];
 						params.model = resp.model || {};
 						let label = [], readNum = [], commentNum = [],growReadNum=[],growCommentNum=[];
 						for (let key in params.model.countData) {
@@ -193,8 +146,6 @@
 			},
 			_initRender(obj){
 				let that = this
-				that.select(that.selectItem,that.models,that.labels);
-
 				that._createChart("myChart1",that.labels,[{
 					"label": '总阅读数',
 					"data": obj.readNum,

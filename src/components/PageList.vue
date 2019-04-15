@@ -13,6 +13,16 @@
 				</template>
 			</el-table-column>
 			<el-table-column
+				prop="read_num"
+				label="阅读数"
+				width="180">
+			</el-table-column>
+			<el-table-column
+				prop="comment_num"
+				label="评论数"
+				width="180">
+			</el-table-column>
+			<el-table-column
 				prop="create_time"
 				label="创建日期"
 				width="180">
@@ -52,6 +62,7 @@
 				let that = this;
 				that.loading = true;
 				let postData = {
+					userName:'github_39570717',
 					pagingQuery:{
 						pageIndex:pageIndex||1,
 						pageSize:10
