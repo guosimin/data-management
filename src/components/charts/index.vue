@@ -95,24 +95,24 @@
 				return new Chart(dom, defalutOption);
 			},
 			_getData(beforeDays){
-				var myDate;
+				let myDate;
 				if(beforeDays&&beforeDays>0){
-					var nowDate = new Date();
+					let nowDate = new Date();
 					myDate = new Date(nowDate - 1000 * 60 * 60 * 24 * beforeDays);
 				}else{
 					myDate =new Date();
 				}
-				var nowY = myDate.getFullYear();
-				var nowM = myDate.getMonth()+1;
-				var nowD = myDate.getDate();
-				var enddate = nowY+(nowM<10 ? "0" + nowM : nowM)+(nowD<10 ? "0"+ nowD : nowD);
+				let nowY = myDate.getFullYear();
+				let nowM = myDate.getMonth()+1;
+				let nowD = myDate.getDate();
+				let enddate = nowY+(nowM<10 ? "0" + nowM : nowM)+(nowD<10 ? "0"+ nowD : nowD);
 				return enddate;
 			},
 			_loadData(){
 				let that = this
 				let params = {}
 				that.loading = true;
-				var postData = {'userName':'github_39570717'};
+				let postData = {'userName':that.$store.state.userName};
 				if(that.fillerDate!=3){
 					postData.start = that.fillerDate==1?that._getData(7):that._getData(30);
 					postData.end = that._getData();

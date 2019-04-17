@@ -15,11 +15,5 @@ const ctrl = require('./ctrl-config');
 
 module.exports = [
 	// ======= 页面相关路由 =======
-	/**
-	 * 查询访问数据
-	 * @params userName (必填)用户名称
-	 * @params start 开始时间
-	 * @params end 结束时间
-	 */
-	{path: '/charts/query', ctrl: ctrl.query,method:'post'},
+	{path: '/common/login', ctrl: ctrl.index,method:'post'},
 ]

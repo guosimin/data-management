@@ -33,11 +33,13 @@
 				width="480">
 			</el-table-column>
 		</el-table>
-		<el-pagination style="margin-top:30px;"
-			background @current-change="currentChange"
-			layout="prev, pager, next"
-			:total="paging.count">
-		</el-pagination>
+		<div v-if="paging&&paging.count">
+			<el-pagination style="margin-top:30px;"
+						   background @current-change="currentChange"
+						   layout="prev, pager, next"
+						   :total="paging.count">
+			</el-pagination>
+		</div>
 	</div>
 </template>
 
@@ -62,7 +64,7 @@
 				let that = this;
 				that.loading = true;
 				let postData = {
-					userName:'github_39570717',
+					userName:that.$store.state.userName,
 					pagingQuery:{
 						pageIndex:pageIndex||1,
 						pageSize:10
@@ -75,8 +77,8 @@
 					data: JSON.stringify(postData),
 					dataType: 'json',
 					success: function (resp) {
-						that.models = resp.models;
-						that.paging = resp.paging;
+						that.models = resp.models||[];
+						that.paging = resp.paging||{};
 						that.loading = false;
 					}
 				});

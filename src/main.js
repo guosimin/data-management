@@ -4,6 +4,7 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 
 import App from './App'
+import store from './store'
 
 //引入路由
 import router from './router'
@@ -15,6 +16,7 @@ import '@/assets/css/csdn.css'
 
 // 公共模块
 import menu from '@/components/common/component/menu'
+import login from '@/components/common/component/login'
 
 //指令
 import highlight from '@/components/common/directive/highlight'
@@ -27,6 +29,7 @@ import $ from "jquery";
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.component('common-menu',menu)
+Vue.component('common-login',login)
 Vue.directive('highlight',highlight)
 
 /* eslint-disable no-new */
@@ -35,5 +38,6 @@ new Vue({
 	router,
 	Chart,
 	$,
+	store,
 	render: h => h(App)
 })

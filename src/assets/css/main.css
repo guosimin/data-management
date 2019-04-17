@@ -28,15 +28,11 @@
 /*表现类型样式*/
 .clearfix{zoom: 1}
 .clearfix:after{clear: both;content: '';display: block}
-.pull-right,.float-right {
-	float: right !important
-}
-
-.pull-left,.float-left {
-	float: left !important
-}
+.pull-right,.float-right {float: right !important}
+.pull-left,.float-left {float: left !important}
 .text-left{text-align: left}
 .text-center{text-align: center}
 .text-right{text-align: right}
 .vertical-m{vertical-align: middle;}
 .text-danger{color: #F56C6C}
+.link{cursor: pointer;}
