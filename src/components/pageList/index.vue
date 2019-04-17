@@ -44,6 +44,7 @@
 </template>
 
 <script>
+	import { Message  } from 'element-ui';
     export default {
         name: "pageList",
 		data() {
@@ -80,6 +81,13 @@
 						that.models = resp.models||[];
 						that.paging = resp.paging||{};
 						that.loading = false;
+					},
+					error:function () {
+						that.loading = false;
+						Message ({
+							type: 'error',
+							message:"网络错误，请稍后重试"
+						})
 					}
 				});
 			},

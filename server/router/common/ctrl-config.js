@@ -59,4 +59,43 @@ module.exports = {
 		}
 
 	},
+	userSetting:async function(ctx){
+		if(!ctx.request.body&&ctx.request.body.userName){
+			ctx.response.body  = Object.assign(ctx.response.body||{},{
+				vaiid:false,
+				message:'请传入用户userName'
+			});
+			return false;
+		}
+
+		let models = [];
+		function loadData(){
+			return new Promise((resolve,reject)=>{
+				MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
+					if (err) throw err;
+					var dbo = db.db("demo");
+					var findObj = Object.assign({},{'user_name':ctx.request.body.userName});
+					dbo.collection("csdn_users").aggregate([
+						{$match:findObj},
+					]).toArray(function(err, result) { // 返回集合中所有数据
+						models = result||[];
+						resolve();
+					})
+				});
+			})
+		}
+
+		await loadData()
+
+		if(models[0]){
+			ctx.response.body  = Object.assign(ctx.response.body||{},{
+				model:models[0],
+			});
+		}else{
+			ctx.response.body  = Object.assign(ctx.response.body||{},{
+				valid:false,
+				message:"找不到该用户的资料"
+			});
+		}
+	}
 }

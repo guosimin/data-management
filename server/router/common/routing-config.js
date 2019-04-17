@@ -16,4 +16,5 @@ const ctrl = require('./ctrl-config');
 module.exports = [
 	// ======= 页面相关路由 =======
 	{path: '/common/login', ctrl: ctrl.index,method:'post'},
+	{path: '/common/user-setting', ctrl: ctrl.userSetting,method:'post'}
 ]

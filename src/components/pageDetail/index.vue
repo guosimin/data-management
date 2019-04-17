@@ -1,14 +1,16 @@
 <template>
-	<div v-html="content" v-highlight></div>
+	<div v-html="content" v-loading="loading" v-highlight></div>
 </template>
 
 
 <script>
+	import { Message  } from 'element-ui';
     export default {
         name: "PageDetail",
 		data(){
         	return {
-        		content:''
+        		content:'',
+				loading:true,
 			}
 		},
 		methods:{
@@ -25,8 +27,17 @@
 					data: postData,
 					dataType: 'json',
 					success: function (resp) {
-						that.content = resp.model.content;
-						console.log("a");
+						that.loading = false;
+						if(resp.valid){
+							that.content = resp.model&&resp.model.content||'';
+						}
+					},
+					error:function () {
+						that.loading = false;
+						Message ({
+							type: 'error',
+							message:"网络错误，请稍后重试"
+						})
 					}
 				});
 			},
