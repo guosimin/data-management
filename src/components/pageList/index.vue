@@ -44,7 +44,6 @@
 </template>
 
 <script>
-	import { Message  } from 'element-ui';
     export default {
         name: "pageList",
 		data() {
@@ -84,7 +83,7 @@
 					},
 					error:function () {
 						that.loading = false;
-						Message ({
+						that.$message ({
 							type: 'error',
 							message:"网络错误，请稍后重试"
 						})

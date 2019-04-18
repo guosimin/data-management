@@ -13,10 +13,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { Message  } from 'element-ui';
-import {setCookie,getCookie,delCookie} from '@/assets/js/common'
+import common from '@/assets/js/common';
 
 Vue.use(Vuex)
-let userName = getCookie('userName');
+let userName = common.getCookie('userName');
 export default new Vuex.Store({
 	state:{
 		isLogin:userName?true:false,
@@ -26,12 +26,12 @@ export default new Vuex.Store({
 		exit(state){
 			state.isLogin = false;
 			state.userName = '';
-			delCookie('userName')
+			common.delCookie('userName')
 		},
 		goLogin(state, userName) {
 			state.isLogin = true;
 			state.userName = userName;
-			setCookie('userName',userName);
+			common.setCookie('userName',userName);
 		}
 	},
 	actions:{
@@ -54,7 +54,7 @@ export default new Vuex.Store({
 				dataType: 'json',
 				success: function (resp) {
 					if(resp.valid){
-						setCookie('userName',userName);
+						common.setCookie('userName',userName);
 						context.commit( 'goLogin', userName );
 					}
 					Message ({

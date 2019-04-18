@@ -18,10 +18,10 @@ let self = {
 	},
 	getCookie(name){
 		if (document.cookie.length>0){
-			start=document.cookie.indexOf(name + "=")
+			var start=document.cookie.indexOf(name + "=")
 			if (start!=-1){
 				start=start + name.length+1
-				end=document.cookie.indexOf(";",start)
+				var end=document.cookie.indexOf(";",start)
 				if (end==-1) end=document.cookie.length
 				return encodeURIComponent(document.cookie.substring(start,end))
 			}
@@ -34,7 +34,20 @@ let self = {
 		var cval=self.getCookie(name);
 		if(cval!=null)
 			document.cookie= name + "="+cval+";expires="+exp.toGMTString();
-	}
+	},
+	copy(obj){
+		var result = Array.isArray(obj) ? [] : {};
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				if (typeof obj[key] === 'object') {
+					result[key] = copy(obj[key]);   //递归复制
+				} else {
+					result[key] = obj[key];
+				}
+			}
+		}
+		return result;
+	},
 }
 
-module.exports = self;
+export default self;

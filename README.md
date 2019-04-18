@@ -25,7 +25,14 @@ node app.js
 ![](./src/assets/img/readmeImg/GIF.gif)
 
 
-## last UPdate   
+## last UPdate    
+* 20190418:       
+1.新增用户信息展示列表       
+2.新增用户信息展示列表筛选功能，启用、禁用功能     
+3.修复js引入方式错误       
+4.用户信息新增状态和获取方式字段    
+![](./src/assets/img/readmeImg/20190418.png)       
+
 * 20190417:       
 1.新增登录、退出功能       
 2.新增vuex状态管理      

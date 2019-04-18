@@ -4,7 +4,6 @@
 
 
 <script>
-	import { Message  } from 'element-ui';
     export default {
         name: "PageDetail",
 		data(){
@@ -34,7 +33,7 @@
 					},
 					error:function () {
 						that.loading = false;
-						Message ({
+						that.$message ({
 							type: 'error',
 							message:"网络错误，请稍后重试"
 						})

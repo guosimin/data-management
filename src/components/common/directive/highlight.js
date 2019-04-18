@@ -10,7 +10,7 @@
  * Copyright 2016, all rights reserved. Essa.cn
  * */
 
-module.exports = function (el) {
+export default function (el) {
 	let blocks = el.querySelectorAll('pre code');
 	blocks.forEach((block)=>{
 		hljs.highlightBlock(block)

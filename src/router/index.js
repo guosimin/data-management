@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import charts from '@/components/charts/index'
 import pageList from '@/components/pageList/index'
 import pageDetail from '@/components/pageDetail/index'
+import user from '@/components/user/index'
 import userSet from '@/components/user/set'
 
 // 调用
@@ -31,6 +32,11 @@ export default new Router({
 			path: '/page-detail',
 			name: 'pageDetail',
 			component: pageDetail
+		},
+		{
+			path: '/user',
+			name: 'user',
+			component: user
 		},
 		{
 			path: '/user-set',

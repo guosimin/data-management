@@ -2,7 +2,7 @@ import Vue from 'vue'
 
 //引入ElementUI框架
 import ElementUI from 'element-ui'
-
+import {Message} from 'element-ui'
 import App from './App'
 import store from './store'
 
@@ -31,6 +31,7 @@ Vue.use(ElementUI)
 Vue.component('common-menu',menu)
 Vue.component('common-login',login)
 Vue.directive('highlight',highlight)
+Vue.prototype.$message = Message
 
 /* eslint-disable no-new */
 new Vue({
