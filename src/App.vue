@@ -35,6 +35,9 @@
 
 <script>
 import {mapState,mapMutations,mapAction } from 'vuex'
+import menu from '@/components/common/component/menu'
+import login from '@/components/common/component/login'
+
 export default {
 	data(){
 		return {}
@@ -44,6 +47,10 @@ export default {
 			isLogin: state => state.isLogin,
 			userName:state => state.userName,
 		}),
+	},
+	components:{
+		'common-menu':menu,
+		'common-login':login
 	},
 	methods:{
 		/**

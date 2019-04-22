@@ -17,4 +17,5 @@ module.exports = [
 	// ======= 页面相关路由 =======
 	{path: '/user/query', ctrl: ctrl.query,method:'post'},
 	{path: '/user/update', ctrl: ctrl.update,method:'post'},
+	{path: '/user/add', ctrl: ctrl.add,method:'post'},
 ]

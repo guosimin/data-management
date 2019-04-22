@@ -123,7 +123,7 @@
 					contentType: 'application/json',
 					data: JSON.stringify(postData),
 					dataType: 'json',
-					success: function (resp) {
+					success(resp) {
 						that.loading = false;
 						params.model = resp.model || {};
 						let label = [], readNum = [], commentNum = [],growReadNum=[],growCommentNum=[];

@@ -4,6 +4,8 @@
 
 
 <script>
+	//指令
+	import highlight from '@/components/common/directive/highlight'
     export default {
         name: "PageDetail",
 		data(){
@@ -25,13 +27,13 @@
 					contentType: 'application/json',
 					data: postData,
 					dataType: 'json',
-					success: function (resp) {
+					success(resp) {
 						that.loading = false;
 						if(resp.valid){
 							that.content = resp.model&&resp.model.content||'';
 						}
 					},
-					error:function () {
+					error() {
 						that.loading = false;
 						that.$message ({
 							type: 'error',
@@ -43,6 +45,9 @@
         	init(){
         		this._loadData();
 			}
+		},
+		directives:{
+			'highlight':highlight
 		},
 		mounted(){
         	this.init()

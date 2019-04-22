@@ -32,6 +32,10 @@ module.exports = {
 					if(ctx.request.body.status==='1'||ctx.request.body.status==='0'){
 						findObj.status = Number(ctx.request.body.status);
 					}
+					if(ctx.request.body.type==='1'||ctx.request.body.type==='2'){
+						findObj.type = Number(ctx.request.body.type);
+					}
+
 					var cursor = dbo.collection("csdn_users").find(findObj);
 					await new Promise((resolve, reject) => {
 						cursor.count(true,findObj,function (error,result) {
@@ -96,5 +100,44 @@ module.exports = {
 			}
 		}
 		ctx.response.body  = Object.assign(ctx.response.body||{},res);
-	}
+	},
+	add:async function (ctx){
+		let models;
+		function loadData(){
+			return new Promise(  (resolve,reject)=>{
+				MongoClient.connect(url, { useNewUrlParser: true }, async function(err, db) {
+					if (err) throw err;
+					var dbo = db.db("demo");
+					dbo.collection("csdn_users")
+						.updateOne({
+							'user_name':ctx.request.body.userName
+						},{
+							'$set':{
+								'user_url':'https://blog.csdn.net/'+ctx.request.body.userName,
+								'type':2,
+								'status':1
+							}
+						},{upsert:true},function (err,results) {
+							models = results.result;
+							resolve();
+
+						})
+				});
+			})
+		}
+
+		await loadData();
+		console.log(models,"models");
+		console.log(!!models&&models.upserted,"models");
+		let res = {
+			message:'新增失败',
+			valid:false
+		}
+		if(models&&models.upserted&&models.upserted.length>0){
+			res = {
+				message:'新增成功'
+			}
+		}
+		ctx.response.body  = Object.assign(ctx.response.body||{},res);
+	},
 }

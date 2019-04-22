@@ -52,7 +52,7 @@ export default new Vuex.Store({
 				contentType: 'application/json',
 				data: JSON.stringify(postData),
 				dataType: 'json',
-				success: function (resp) {
+				success(resp) {
 					if(resp.valid){
 						common.setCookie('userName',userName);
 						context.commit( 'goLogin', userName );
@@ -62,7 +62,7 @@ export default new Vuex.Store({
 						message:resp.valid?"登录成功":resp.message||''
 					})
 				},
-				error:function () {
+				error() {
 					Message ({
 						type: 'error',
 						message:"网络错误，请稍后重试"

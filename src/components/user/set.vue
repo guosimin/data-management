@@ -29,7 +29,7 @@
 					<div>
 						<el-form ref="form" :model="form" label-width="100px">
 							<el-form-item label="博文地址：">
-								<a href="https://blog.csdn.net/github_39570717">{{model.user_url||'-'}}</a>
+								<a :href="model.user_url">{{model.user_url||'-'}}</a>
 							</el-form-item>
 						</el-form>
 					</div>
@@ -61,11 +61,11 @@
 					contentType: 'application/json',
 					data: JSON.stringify(postData),
 					dataType: 'json',
-					success: function (resp) {
+					success(resp) {
 						that.loading = false;
 						that.model = resp.model;
 					},
-					error:function () {
+					error() {
 						that.loading = false;
 						that.$message ({
 							type: 'error',

@@ -76,12 +76,12 @@
 					contentType: 'application/json',
 					data: JSON.stringify(postData),
 					dataType: 'json',
-					success: function (resp) {
+					success(resp) {
 						that.models = resp.models||[];
 						that.paging = resp.paging||{};
 						that.loading = false;
 					},
-					error:function () {
+					error() {
 						that.loading = false;
 						that.$message ({
 							type: 'error',
