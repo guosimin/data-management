@@ -35,7 +35,7 @@
 </template>
 
 <script>
-	let Chart1,Chart2,Chart3,Chart4,Chart1_1,Chart2_1;
+	let chart = [];
 	export default {
 		name: "charts",
 		data() {
@@ -56,6 +56,10 @@
 			},
 			/**
 			 * 创建chart调用
+			 * @params <String> dom 名称
+			 * @params <Array> x轴每一项的名称
+			 * @params <Array> 数据源
+			 * @params chart图像类型
 			 */
 			_createChart (str,label,datasets,type){
 				if(!document.getElementById(str)){
@@ -94,6 +98,11 @@
 				defalutOption = $.extend(true, defalutOption, option);
 				return new Chart(dom, defalutOption);
 			},
+			/**
+			 * 获取多少天的时间戳
+			 * @param beforeDays 多少天
+			 * return 时间戳
+			 */
 			_getData(beforeDays){
 				let myDate;
 				if(beforeDays&&beforeDays>0){
@@ -108,6 +117,9 @@
 				let enddate = nowY+(nowM<10 ? "0" + nowM : nowM)+(nowD<10 ? "0"+ nowD : nowD);
 				return enddate;
 			},
+			/**
+			 * 加载数据
+			 */
 			_loadData(){
 				let that = this
 				let params = {}
@@ -144,21 +156,39 @@
 					}
 				});
 			},
+			/**
+			 * 清空canvas图像
+			 * @private
+			 */
+			_destroy(){
+				for(var i = 1;i<chart.length;i++){
+					if(chart[i]&&chart[i].destroy){
+						chart[i].destroy()
+					}
+				}
+			},
+			/**
+			 * 初始化渲染
+			 * @param obj 数据源
+			 * @private
+			 */
 			_initRender(obj){
-				let that = this
-				that._createChart("myChart1",that.labels,[{
+				let that = this;
+				//清空canvas图像
+				that._destroy();
+				chart[0] = that._createChart("myChart1",that.labels,[{
 					"label": '总阅读数',
 					"data": obj.readNum,
 				}]);
-				that._createChart("myChart2",that.labels,[{
+				chart[1] = that._createChart("myChart2",that.labels,[{
 					"label": '总评论数',
 					"data": obj.commentNum,
 				}]);
-				that._createChart("myChart1_1",that.labels,[{
+				chart[2] = that._createChart("myChart1_1",that.labels,[{
 					"label": '总阅读数-增长数',
 					"data": obj.growReadNum,
 				}],'horizontalBar');
-				that._createChart("myChart2_2",that.labels,[{
+				chart[3] = that._createChart("myChart2_2",that.labels,[{
 					"label": '总评论数-增长数',
 					"data": obj.growCommentNum,
 				}],'horizontalBar');
