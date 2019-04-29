@@ -10,7 +10,9 @@
         name: "PageDetail",
 		data(){
         	return {
+        		//内容
         		content:'',
+				//加载
 				loading:true,
 			}
 		},
@@ -46,6 +48,7 @@
         		this._loadData();
 			}
 		},
+		//指令
 		directives:{
 			'highlight':highlight
 		},
@@ -54,7 +57,3 @@
 		}
     }
 </script>
-
-<style scoped>
-
-</style>

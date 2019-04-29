@@ -51,6 +51,9 @@
 			}
 		},
 		methods:{
+			/**
+			 * 切换筛选时间
+			 */
 			change(){
 				this._loadData()
 			},
@@ -161,8 +164,10 @@
 			 * @private
 			 */
 			_destroy(){
-				for(var i = 1;i<chart.length;i++){
+				for(var i = 0;i<chart.length;i++){
 					if(chart[i]&&chart[i].destroy){
+						console.log(chart[i],"chart[i]");
+						console.log(i,"i");
 						chart[i].destroy()
 					}
 				}

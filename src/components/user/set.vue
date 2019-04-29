@@ -49,7 +49,11 @@
 			}
 		},
 		methods:{
-        	_loadData(){
+			/**
+			 * 加载数据
+			 * @private
+			 */
+			_loadData(){
         		let that = this;
 				that.loading = true;
 				let postData = {

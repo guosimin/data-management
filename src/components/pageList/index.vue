@@ -54,12 +54,26 @@
 			}
 		},
 		methods:{
+			/**
+			 * 打开链接
+			 * @param location 地址
+			 * @param query 参数
+			 */
 			handleOpen(location,query){
 				this.$router.push({path:location,query:query})
 			},
+			/**
+			 * 切换分页
+			 * @param pageIndex 第几页
+			 */
 			currentChange(pageIndex) {
 				this._loadData(pageIndex);
 			},
+			/**
+			 * 加载数据
+			 * @param pageIndex 第几页
+			 * @private
+			 */
 			_loadData(pageIndex){
 				let that = this;
 				that.loading = true;
@@ -77,9 +91,9 @@
 					data: JSON.stringify(postData),
 					dataType: 'json',
 					success(resp) {
+						that.loading = false;
 						that.models = resp.models||[];
 						that.paging = resp.paging||{};
-						that.loading = false;
 					},
 					error() {
 						that.loading = false;
