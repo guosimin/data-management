@@ -35,16 +35,25 @@ export default new Vuex.Store({
 		}
 	},
 	actions:{
-		goLogin(context,userName){
-			if(!userName){
+		goLogin(context,params){
+			if(!params.userName){
 				Message ({
 					type: 'error',
 					message:"请输入用户名"
 				})
 				return false
 			}
+
+			if(!params.password){
+				Message ({
+					type: 'error',
+					message:"请输入密码"
+				})
+				return false
+			}
 			let postData = {
-				userName:userName
+				userName:params.userName,
+				password:params.password
 			}
 			$.ajax({
 				url:'http://localhost:7777/common/login',
@@ -54,8 +63,8 @@ export default new Vuex.Store({
 				dataType: 'json',
 				success(resp) {
 					if(resp.valid){
-						common.setCookie('userName',userName);
-						context.commit( 'goLogin', userName );
+						common.setCookie('userName',params.userName);
+						context.commit( 'goLogin', params.userName );
 					}
 					Message ({
 						type: resp.valid?'success':'warning',

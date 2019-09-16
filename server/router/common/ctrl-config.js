@@ -30,11 +30,11 @@ module.exports = {
 			return new Promise((resolve,reject)=>{
 				MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 					if (err) throw err;
-					var dbo = db.db("demo");
-					var findObj = Object.assign({},{'user_name':ctx.request.body.userName});
-					dbo.collection("csdn_users").aggregate([
+					var dbo = db.db("note");
+					var findObj = Object.assign({},{'name':ctx.request.body.userName,password:ctx.request.body.password});
+					dbo.collection("n_user").aggregate([
 						{$match:findObj},
-						{$project:{'user_name':1,'avatar':1}},
+						{$project:{'name':1}},
 					]).toArray(function(err, result) { // 返回集合中所有数据
 						models = result||[];
 						resolve();
@@ -45,16 +45,16 @@ module.exports = {
 
 		await loadData()
 
-		if(models[0]&&models[0].user_name){
+		if(models[0]&&models[0].name){
 			ctx.response.body  = Object.assign(ctx.response.body||{},{
 				model:{
-					userName:models[0]&&models[0].user_name
+					userName:models[0]&&models[0].name
 				},
 			});
 		}else{
 			ctx.response.body  = Object.assign(ctx.response.body||{},{
 				valid:false,
-				message:"你输入的userName错误,请重新输入"
+				message:"你输入的 userName or 密码 错误,请重新输入"
 			});
 		}
 

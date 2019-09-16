@@ -32,7 +32,7 @@ app.use(cors({
 		if (ctx.url === '/test') {
 			return "*"; // 允许来自所有域名请求
 		}
-		return 'http://localhost:8081';
+		return 'http://localhost:8080';
 	},
 	methods:['GET','POST'],
 	allowHeaders: ['Content-Type', 'Authorization', 'Accept'],

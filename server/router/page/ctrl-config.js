@@ -24,8 +24,8 @@ module.exports = {
 			return new Promise(  (resolve,reject)=>{
 				MongoClient.connect(url, { useNewUrlParser: true }, async function(err, db) {
 					if (err) throw err;
-					var dbo = db.db("demo");
-					var cursor = dbo.collection("page").find({'user_name':ctx.request.body.userName},{projection:{title:1,link:1,create_time:1}});
+					var dbo = db.db("note");
+					var cursor = dbo.collection("n_user").find({});
 					await new Promise((resolve, reject) => {
 						cursor.count(true,{},function (error,result) {
 							// 返回总条数
@@ -34,11 +34,9 @@ module.exports = {
 						});
 					});
 					await new Promise((resolve, reject) => {
-						dbo.collection("page").aggregate([
+						dbo.collection("n_user").aggregate([
 							{
-								$match: {
-									'user_name':ctx.request.body.userName
-								}
+								$match: {}
 							},
 							{
 								$sort: {
@@ -49,35 +47,10 @@ module.exports = {
 							{$limit:(pagingQuery.pageSize)},
 							{
 								$project: {
-									title: 1,
-									link: 1,
+									name: 1,
 									create_time: 1,
-									page_id: 1
 								}
-							},
-							{
-								$lookup: {
-									from: 'page_spider_data',
-									localField: 'page_id',
-									foreignField: 'page_id',
-									as: 'spider'
-								}
-							},
-							{
-								$project: {
-									title: 1,
-									link: 1,
-									create_time: 1,
-									page_id: 1,
-									read_num: {
-										$max: "$spider.read_num"
-									},
-									comment_num: {
-										$max: "$spider.comment_num"
-									}
-								}
-							},
-
+							}
 						]).toArray(function(err, result) { // 返回集合中所有数据
 							models = result;
 							resolve();

@@ -1,36 +1,36 @@
 <template>
 	<div v-loading="loading">
-		<h3>文章列表</h3>
+		<h3>用户管理</h3>
 		<el-table
 			:data="models"
 			border
 			style="width: 100%;margin-top: 20px;">
 			<el-table-column
-				prop="title"
-				label="文章名称">
+				prop="name"
+				label="用户名称">
 				<template slot-scope="scope">
-					<el-button type="text" @click="handleOpen('/page-detail',{id:scope.row._id})">{{scope.row.title}}</el-button>
+					<el-button type="text" @click="handleOpen('/page-detail',{id:scope.row._id})">{{scope.row.name}}</el-button>
 				</template>
 			</el-table-column>
 			<el-table-column
 				prop="read_num"
-				label="阅读数"
+				label="注册时间"
 				width="180">
 			</el-table-column>
 			<el-table-column
 				prop="comment_num"
-				label="评论数"
+				label="最后访问时间"
 				width="180">
 			</el-table-column>
 			<el-table-column
 				prop="create_time"
-				label="创建日期"
+				label="已建立人设数"
 				width="180">
 			</el-table-column>
 			<el-table-column
-				prop="link"
-				label="链接"
-				width="480">
+				prop="create_time"
+				label="权限"
+				width="180">
 			</el-table-column>
 		</el-table>
 		<div v-if="paging&&paging.count">

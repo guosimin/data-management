@@ -59,7 +59,7 @@ export default {
 		handleCommand(command){
 			switch (command) {
 				case 'set':
-					this.$router.push('/user-set')
+					// this.$router.push('/user-set')
 					break;
 				case 'exit':
 					this.$store.commit('exit')
